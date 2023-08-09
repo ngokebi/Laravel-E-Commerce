@@ -8,7 +8,10 @@ use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Backend\ProductsController;
 use App\Http\Controllers\Frontend\IndexController;
+use App\Http\Controllers\Frontend\CartController;
+use App\Http\Controllers\User\WishlistController;
 use App\Http\Controllers\Backend\SliderController;
+use App\Http\Controllers\User\WishlistController as UserWishlistController;
 use App\Models\Brand;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
@@ -34,7 +37,8 @@ Route::middleware('admin:admin')->group(function () {
 });
 
 
-Route::middleware(['auth:sanctum,admin', config('jetstream.auth_session'), 'verified'
+Route::middleware([
+    'auth:sanctum,admin', config('jetstream.auth_session'), 'verified'
 ])->group(function () {
     Route::get('/admin/dashboard', function () {
         return view('admin.index');
@@ -43,7 +47,8 @@ Route::middleware(['auth:sanctum,admin', config('jetstream.auth_session'), 'veri
 
 
 
-Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'
+Route::middleware([
+    'auth:sanctum', config('jetstream.auth_session'), 'verified'
 ])->group(function () {
     Route::get('/dashboard', function () {
         $id = Auth::user()->id;
@@ -180,3 +185,25 @@ Route::get('/subsubcategory/product/{subsubcat_id}/{subsubcat_name}', [IndexCont
 
 // Product View Modal ( add to cart)
 Route::get('/product/view/modal/{id}', [IndexController::class, 'ProductViewAjax']);
+
+// Add to Cart
+Route::post('/cart/data/store/{id}', [CartController::class, 'addTocart']);
+
+// Mini Cart
+Route::get('/product/mini/cart/', [CartController::class, 'miniCart']);
+
+// Remove mini cart
+Route::get('/minicart/product_remove/{rowId}', [CartController::class, 'RemoveMiniCart']);
+
+// add to WIshlist
+Route::post('/add_to_wishlist/{product_id}', [WishlistController::class, 'AddtoWishlist']);
+
+Route::prefix('user')->middleware('auth', 'user')->group(function () {
+
+    // Wishlist
+    Route::get('/wishlist', [WishlistController::class, 'WishlistHome'])->name('wishlist');
+    // get Wishlist
+    Route::get('/get_wishlist', [WishlistController::class, 'getWishlist']);
+    // Remove wishlist
+    Route::get('/wishlist_remove/{id}', [WishlistController::class, 'RemoveWishlistProduct']);
+});
