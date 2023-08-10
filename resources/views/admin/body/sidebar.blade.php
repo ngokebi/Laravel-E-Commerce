@@ -1,6 +1,6 @@
 @php
-$prefix = Request::route()->getPrefix();
-$route = Route::current()->getName();
+    $prefix = Request::route()->getPrefix();
+    $route = Route::current()->getName();
 @endphp
 <aside class="main-sidebar">
     <!-- sidebar-->
@@ -53,8 +53,8 @@ $route = Route::current()->getName();
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{ $route == 'all.category' ? 'active' : '' }}"><a
-                            href="{{ route('all.category') }}"><i class="ti-more"></i>All Category</a></li>
+                    <li class="{{ $route == 'all.category' ? 'active' : '' }}"><a href="{{ route('all.category') }}"><i
+                                class="ti-more"></i>All Category</a></li>
                     <li class="{{ $route == 'add.category' ? 'active' : '' }}"><a
                             href="{{ route('add.category') }}"><i class="ti-more"></i>New Category</a></li>
                 </ul>
@@ -125,8 +125,8 @@ $route = Route::current()->getName();
                     <li class="{{ $route == 'manage.slider' ? 'active' : '' }}"><a
                             href="{{ route('manage.slider') }}"><i class="ti-more"></i>Manage Slider</a>
                     </li>
-                    <li class="{{ $route == 'add.slider' ? 'active' : '' }}"><a
-                            href="{{ route('add.slider') }}"><i class="ti-more"></i>Add Slider</a></li>
+                    <li class="{{ $route == 'add.slider' ? 'active' : '' }}"><a href="{{ route('add.slider') }}"><i
+                                class="ti-more"></i>Add Slider</a></li>
                 </ul>
             </li>
 
@@ -142,8 +142,59 @@ $route = Route::current()->getName();
                     <li class="{{ $route == 'manage.coupon' ? 'active' : '' }}"><a
                             href="{{ route('manage.coupon') }}"><i class="ti-more"></i>Manage Coupon</a>
                     </li>
-                    <li class="{{ $route == 'add.coupon' ? 'active' : '' }}"><a
-                            href="{{ route('add.coupon') }}"><i class="ti-more"></i>Add Coupon</a></li>
+                    <li class="{{ $route == 'add.coupon' ? 'active' : '' }}"><a href="{{ route('add.coupon') }}"><i
+                                class="ti-more"></i>Add Coupon</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview {{ $prefix == '/shipping' ? 'active' : '' }}">
+                <a href="#">
+                    <i data-feather="file"></i>
+                    <span>Shipping Division</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-right pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ $route == 'manage.shipping' ? 'active' : '' }}"><a
+                            href="{{ route('manage.shipping') }}"><i class="ti-more"></i>Ship Division</a>
+                    </li>
+                    <li class="{{ $route == 'add.shipping' ? 'active' : '' }}"><a
+                            href="{{ route('add.shipping') }}"><i class="ti-more"></i>Add Division</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview {{ $prefix == '/state' ? 'active' : '' }}">
+                <a href="#">
+                    <i data-feather="file"></i>
+                    <span>Shipping State</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-right pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ $route == 'manage.state' ? 'active' : '' }}"><a
+                            href="{{ route('manage.state') }}"><i class="ti-more"></i>Division State</a>
+                    </li>
+                    <li class="{{ $route == 'add.state' ? 'active' : '' }}"><a href="{{ route('add.state') }}"><i
+                                class="ti-more"></i>Add State</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview {{ $prefix == '/area' ? 'active' : '' }}">
+                <a href="#">
+                    <i data-feather="file"></i>
+                    <span>Shipping Area</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-right pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ $route == 'manage.area' ? 'active' : '' }}"><a
+                            href="{{ route('manage.area') }}"><i class="ti-more"></i>Division Area</a>
+                    </li>
+                    <li class="{{ $route == 'add.area' ? 'active' : '' }}"><a href="{{ route('add.area') }}"><i
+                                class="ti-more"></i>Add Area</a></li>
                 </ul>
             </li>
 

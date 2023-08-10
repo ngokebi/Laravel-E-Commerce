@@ -6,13 +6,13 @@ use App\Http\Controllers\Backend\AdminProfileController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\CouponController;
+use App\Http\Controllers\Backend\ShippingAreaController;
 use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Backend\ProductsController;
 use App\Http\Controllers\Frontend\IndexController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\User\WishlistController;
 use App\Http\Controllers\Backend\SliderController;
-use App\Http\Controllers\User\WishlistController as UserWishlistController;
 use App\Models\Brand;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
@@ -161,6 +161,56 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('/inactive/{id}', [SliderController::class, 'Inactive'])->name('slider.inactive');
         Route::get('/active/{id}', [SliderController::class, 'Active'])->name('slider.active');
     });
+
+    // Admin Coupon
+
+Route::prefix('coupon')->group(function () {
+
+    Route::get('/view', [CouponController::class, 'CouponView'])->name('manage.coupon');
+    Route::get('/add', [CouponController::class, 'AddCoupon'])->name('add.coupon');
+    Route::post('/store', [CouponController::class, 'StoreCoupon'])->name('store.coupon');
+    Route::get('/edit/{id}', [CouponController::class, 'EditCoupon'])->name('edit.coupon');
+    Route::get('/delete/{id}', [CouponController::class, 'DeleteCoupon'])->name('delete.coupon');
+    Route::post('/update', [CouponController::class, 'UpdateCoupon'])->name('update.coupon');
+
+});
+
+// Admin Shipping Division
+
+Route::prefix('shipping')->group(function () {
+
+    Route::get('/view', [ShippingAreaController::class, 'ShippingView'])->name('manage.shipping');
+    Route::get('/add', [ShippingAreaController::class, 'AddShipping'])->name('add.shipping');
+    Route::post('/store', [ShippingAreaController::class, 'StoreShipping'])->name('store.shipping');
+    Route::get('/edit/{id}', [ShippingAreaController::class, 'EditShipping'])->name('edit.shipping');
+    Route::get('/delete/{id}', [ShippingAreaController::class, 'DeleteShipping'])->name('delete.shipping');
+    Route::post('/update', [ShippingAreaController::class, 'UpdateShipping'])->name('update.shipping');
+
+});
+
+Route::prefix('state')->group(function () {
+
+    Route::get('/view', [ShippingAreaController::class, 'StateView'])->name('manage.state');
+    Route::get('/add', [ShippingAreaController::class, 'AddState'])->name('add.state');
+    Route::post('/store', [ShippingAreaController::class, 'StoreState'])->name('store.state');
+    Route::get('/edit/{id}', [ShippingAreaController::class, 'EditState'])->name('edit.state');
+    Route::get('/delete/{id}', [ShippingAreaController::class, 'DeleteState'])->name('delete.state');
+    Route::post('/update', [ShippingAreaController::class, 'UpdateState'])->name('update.state');
+
+});
+
+Route::prefix('area')->group(function () {
+
+    Route::get('/view', [ShippingAreaController::class, 'AreaView'])->name('manage.area');
+    Route::get('/add', [ShippingAreaController::class, 'AddArea'])->name('add.area');
+    Route::post('/store', [ShippingAreaController::class, 'StoreArea'])->name('store.area');
+    Route::get('/edit/{id}', [ShippingAreaController::class, 'EditArea'])->name('edit.area');
+    Route::get('/delete/{id}', [ShippingAreaController::class, 'DeleteArea'])->name('delete.area');
+    Route::post('/update', [ShippingAreaController::class, 'UpdateArea'])->name('update.area');
+    Route::get('/state/ajax/{division_id}', [ShippingAreaController::class, 'Get_State']);
+
+});
+
 });
 
 // User All Route
@@ -218,15 +268,4 @@ Route::get('/user/cartlist_remove/{id}', [CartController::class, 'RemoveCartList
 Route::get('/cart_increment/{rowId}', [CartController::class, 'qtyUpdate']);
 
 
-// Admin Coupon
 
-Route::prefix('coupon')->group(function () {
-
-    Route::get('/view', [CouponController::class, 'CouponView'])->name('manage.coupon');
-    Route::get('/add', [CouponController::class, 'AddCoupon'])->name('add.coupon');
-    Route::post('/store', [CouponController::class, 'StoreCoupon'])->name('store.coupon');
-    Route::get('/edit/{id}', [CouponController::class, 'EditCoupon'])->name('edit.coupon');
-    Route::get('/delete/{id}', [CouponController::class, 'DeleteCoupon'])->name('delete.coupon');
-    Route::post('/update', [CouponController::class, 'UpdateCoupon'])->name('update.coupon');
-
-});
