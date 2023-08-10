@@ -66,4 +66,37 @@ class CartController extends Controller
         Cart::remove($rowId);
         return response()->json(['success' => 'Product Remove from Cart']);
     }
+
+    public function CartIndex()
+    {
+        return view('frontend.pages.cart');
+    }
+
+    public function getCartItem()
+    {
+        $carts = Cart::content();
+        $cartQty = Cart::count();
+        $cartTotal = Cart::total();
+
+        return response()->json(array(
+            'carts' => $carts,
+            'cartQty' => $cartQty,
+            'cartTotal' => $cartTotal
+        ));
+    }
+
+    public function RemoveCartList($rowId)
+    {
+        Cart::remove($rowId);
+        return response()->json(['success' => 'Product Remove from Cart']);
+    }
+
+    public function qtyUpdate(Request $request, $rowId)
+    {
+
+        $quantity = $request->qty;
+        Cart::update($rowId, ['qty' => $quantity]);
+
+        return response()->json('Quantity Updated');
+    }
 }

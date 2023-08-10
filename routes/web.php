@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Backend\AdminProfileController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\CouponController;
 use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Backend\ProductsController;
 use App\Http\Controllers\Frontend\IndexController;
@@ -206,4 +207,26 @@ Route::prefix('user')->middleware('auth', 'user')->group(function () {
     Route::get('/get_wishlist', [WishlistController::class, 'getWishlist']);
     // Remove wishlist
     Route::get('/wishlist_remove/{id}', [WishlistController::class, 'RemoveWishlistProduct']);
+});
+
+// Cart
+Route::get('/mycart', [CartController::class, 'CartIndex'])->name('mycart');
+// get Cart Items
+Route::get('/user/cartitem', [CartController::class, 'getCartItem']);
+// Remove CartList
+Route::get('/user/cartlist_remove/{id}', [CartController::class, 'RemoveCartList']);
+Route::get('/cart_increment/{rowId}', [CartController::class, 'qtyUpdate']);
+
+
+// Admin Coupon
+
+Route::prefix('coupon')->group(function () {
+
+    Route::get('/view', [CouponController::class, 'CouponView'])->name('manage.coupon');
+    Route::get('/add', [CouponController::class, 'AddCoupon'])->name('add.coupon');
+    Route::post('/store', [CouponController::class, 'StoreCoupon'])->name('store.coupon');
+    Route::get('/edit/{id}', [CouponController::class, 'EditCoupon'])->name('edit.coupon');
+    Route::get('/delete/{id}', [CouponController::class, 'DeleteCoupon'])->name('delete.coupon');
+    Route::post('/update', [CouponController::class, 'UpdateCoupon'])->name('update.coupon');
+
 });

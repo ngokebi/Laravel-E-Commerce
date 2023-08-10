@@ -368,7 +368,6 @@
     </script>
 
     <script type="text/javascript">
-
         function wishList() {
             $.ajax({
                 type: 'GET',
@@ -441,6 +440,115 @@
         }
     </script>
 
+    <script type="text/javascript">
+        function cartList() {
+            $.ajax({
+                type: 'GET',
+                url: '/user/cartitem',
+                dataType: 'json',
+                success: function(response) {
+                    $('span[id="cartSubTotal"]').text(response.cartTotal);
+                    $('span[id="cartQty"]').text(response.cartQty);
+
+                    var cartListRow = '';
+                    $.each(response.carts, function(key, value) {
+                        cartListRow += `<tr>
+                                    <td class="romove-item"><a id="${value.rowId}" onclick="cartListRemove(this.id)" title="cancel" class="icon"><i
+                                                class="fa fa-trash-o"></i></a></td>
+                                    <td class="cart-image">
+                                        <a class="entry-thumbnail" href="detail.html">
+                                            <img src="/${value.options.image}" alt="">
+                                        </a>
+                                    </td>
+                                    <td class="cart-product-name-info">
+                                        <h4 class='cart-product-description'><a href="../product/details/${value.id}/${value.name}">${value.name}</a></h4>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="rating rateit-small"></div>
+                                            </div>
+                                        </div><!-- /.row -->
+                                        <div class="cart-product-info">
+                                            <span class="product-color">COLOR:<span>${value.options.color}</span></span>
+                                        </div>
+                                    </td>
+                                    <td class="cart-product-quantity">
+                                        <div class="cart-quantity">
+                                            <div class="quant-input">
+                                                <input type="number" id="${value.rowId}" class="qtyCart" min="1" value="${value.qty}" onchange="qtyChange(this.id)">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="cart-product-edit">${value.options.size == null ? `<span>....</span>` : `<strong>${value.options.size}</strong>`}
+                                    </td>
+                                    <td class="cart-product-sub-total"><span
+                                            class="cart-sub-total-price">$${value.price}</span></td>
+                                    <td class="cart-product-grand-total"><span
+                                            class="cart-grand-total-price">$${value.price * value.qty}</span></td>
+                                </tr>`
+
+                    });
+                    $('#cartitem').html(cartListRow);
+                }
+            })
+        }
+        cartList();
+
+        // cartList remove
+        function cartListRemove(id) {
+            $.ajax({
+                type: 'GET',
+                url: '/user/cartlist_remove/' + id,
+                dataType: 'json',
+                success: function(data) {
+                    cartList();
+                    miniCart();
+                    // Start Message
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 3000
+                    })
+                    if ($.isEmptyObject(data.error)) {
+                        Toast.fire({
+                            type: 'success',
+                            title: data.success
+                        })
+                    } else {
+                        Toast.fire({
+                            type: 'error',
+                            title: data.error
+                        })
+                    }
+                    // End Message
+
+                }
+            })
+        }
+
+        function qtyChange(rowId) {
+            var newqty = $('.qtyCart').val();
+
+            $.ajax({
+                type: 'GET',
+                url: "/cart_increment/" + rowId,
+                data: {
+                    qty: newqty
+                },
+                dataType: 'json',
+                success: function(data) {
+                    cartList();
+                    miniCart();
+                }
+            });
+        }
+    </script>
+
 </body>
 
 </html>
+<div class="arrows">
+    <div class="arrow plus gradient"><span class="ir"><i class="icon fa fa-sort-asc"></i></span></div>
+    <div class="arrow minus gradient"><span class="ir"><i class="icon fa fa-sort-desc"></i></span></div>
+</div>
