@@ -13,6 +13,7 @@ use App\Http\Controllers\Frontend\IndexController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\User\WishlistController;
 use App\Http\Controllers\Backend\SliderController;
+use App\Http\Controllers\Frontend\PaymentController;
 use App\Models\Brand;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
@@ -265,7 +266,26 @@ Route::get('/mycart', [CartController::class, 'CartIndex'])->name('mycart');
 Route::get('/user/cartitem', [CartController::class, 'getCartItem']);
 // Remove CartList
 Route::get('/user/cartlist_remove/{id}', [CartController::class, 'RemoveCartList']);
+
 Route::get('/cart_increment/{rowId}', [CartController::class, 'qtyUpdate']);
+// apply coupon
+Route::post('/coupon_apply', [CouponController::class, 'CouponApply']);
+// calculate coupon
+Route::get('/coupon_calculate', [CouponController::class, 'CouponCalculate']);
+// remove coupon
+Route::get('/remove_coupon', [CouponController::class, 'CouponRemove']);
 
 
+// Check Out
+
+Route::get('/checkout', [CartController::class, 'Checkout'])->name('checkout');
+
+Route::get('/shipping/state/ajax/{division_id}', [CartController::class, 'Get_State']);
+
+Route::get('/shipping/area/ajax/{state_id}', [CartController::class, 'Get_Area']);
+
+// Checkout Store
+Route::post('/checkout/store', [CartController::class, 'StoreCheckout'])->name('checkout.store');
+
+Route::get('verify_product/{reference}', [PaymentController::class, 'verify_product'])->name('verify_product');
 

@@ -26,6 +26,9 @@
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/animate.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/rateit.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap-select.min.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+
+
 
     <!-- Icons/Glyphs -->
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/font-awesome.css') }}">
@@ -68,6 +71,30 @@
     <script src="{{ asset('frontend/assets/js/wow.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/scripts.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "5000",
+            "hideDuration": "5000",
+            "timeOut": "5000",
+            "extendedTimeOut": "5000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+            // onHidden: function() {
+            //     window.location.reload();
+            //     // location.reload(true);
+            // }
+        }
+    </script>
 
 
     <!-- Add to Cart Product Modal -->
@@ -330,7 +357,7 @@
                         })
                     }
                     // End Message
-
+                    location.reload(true);
                 }
             })
         }
@@ -522,7 +549,7 @@
                         })
                     }
                     // End Message
-
+                    location.reload(true);
                 }
             })
         }
@@ -538,6 +565,7 @@
                 },
                 dataType: 'json',
                 success: function(data) {
+                    couponCalculation();
                     cartList();
                     miniCart();
                 }
@@ -545,10 +573,136 @@
         }
     </script>
 
+    <script type="text/javascript">
+        function applyCoupon() {
+            var coupon_name = $('#coupon_name').val();
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: "{{ url('/coupon_apply') }}",
+                data: {
+                    coupon_name: coupon_name
+                },
+                success: function(data) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    })
+                    if ($.isEmptyObject(data.error)) {
+                        Toast.fire({
+                            type: 'success',
+                            icon: 'success',
+                            title: data.success
+                        })
+                    } else {
+                        Toast.fire({
+                            type: 'error',
+                            icon: 'error',
+                            title: data.error
+                        })
+                    }
+                    location.reload(true);
+                }
+            })
+        }
+
+        function couponCalculation() {
+            $.ajax({
+                type: 'GET',
+                url: "{{ url('/coupon_calculate') }}",
+                dataType: 'json',
+                success: function(data) {
+                    if (data.total) {
+                        $('#couponCalField').html(
+                            `<tr>
+                                <th>
+                                    <div class="cart-sub-total">
+                                        Total Quantity<span class="inner-left-md">${data.cartQty}</span>
+                                    </div>
+                                    <div class="cart-grand-total">
+                                        SubTotal<span class="total-price"><span class="inner-left-md">
+                                                <span class="sign">$</span><span>${data.total}</span></span>
+                                        </span>
+                                    </div>
+                                    <div class="cart-grand-total">
+                                        GrandTotal<span class="total-price"><span class="inner-left-md">
+                                                <span class="sign">$</span><span>${data.total}</span></span>
+                                        </span>
+                                    </div>
+                                </th>
+                            </tr>`
+                        )
+                    } else {
+                        $('#couponCalField').html(
+                            `<tr>
+                                <th>
+                                    <div class="cart-sub-total">
+                                        Total Quantity:<span class="inner-left-md">${data.cartQty}</span>
+                                    </div>
+                                    <div class="cart-sub-total">
+                                        DIscount Name:<span class="inner-left-md">${data.coupon_name}</span><span>&nbsp;&nbsp;<button type="submit" title="cancel" onclick="removeCoupon()" class="icon"><i class="fa fa-trash-o"></i></button></span>
+                                    </div>
+                                    <div class="cart-grand-total">
+                                        Sub Total<span class="total-price"><span class="inner-left-md">
+                                                <span class="sign">$</span><span>${data.subtotal}</span></span>
+                                        </span>
+                                    </div>
+                                    <div class="cart-grand-total">
+                                        Discount Amount<span class="total-price"><span class="inner-left-md">
+                                                <span class="sign" style ="color:red;">$</span><span style ="color:red;">${data.discount_amount}</span></span>
+                                        </span>
+                                    </div>
+                                    <div class="cart-grand-total">
+                                        Grand Total<span class="total-price"><span class="inner-left-md">
+                                                <span class="sign">$</span><span>${data.total_amount}</span></span>
+                                        </span>
+                                    </div>
+                                </th>
+                            </tr>`
+                        )
+                    }
+
+                }
+            })
+        }
+        couponCalculation();
+
+        function removeCoupon() {
+            $.ajax({
+                    type: 'GET',
+                    url: "{{ url('/remove_coupon') }}",
+                    dataType: 'json',
+                    success: function(data) {
+                        couponCalculation();
+                        const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    })
+                    if ($.isEmptyObject(data.error)) {
+                        Toast.fire({
+                            type: 'success',
+                            icon: 'success',
+                            title: data.success
+                        })
+                    } else {
+                        Toast.fire({
+                            type: 'error',
+                            icon: 'error',
+                            title: data.error
+                        })
+                    }
+                    location.reload(true);
+                    }
+            })
+        }
+    </script>
+
 </body>
 
 </html>
-<div class="arrows">
-    <div class="arrow plus gradient"><span class="ir"><i class="icon fa fa-sort-asc"></i></span></div>
-    <div class="arrow minus gradient"><span class="ir"><i class="icon fa fa-sort-desc"></i></span></div>
-</div>
+

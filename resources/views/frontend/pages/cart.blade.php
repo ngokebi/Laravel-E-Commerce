@@ -4,7 +4,7 @@
 @section('title')
     My Cart
 @endsection
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <div class="breadcrumb">
     <div class="container">
         <div class="breadcrumb-inner">
@@ -56,7 +56,7 @@
                     </div>
                 </div><!-- /.shopping-cart-table -->
                 <div class="col-md-4 col-sm-12 estimate-ship-tax">
-                    <table class="table">
+                    {{-- <table class="table">
                         <thead>
                             <tr>
                                 <th>
@@ -103,58 +103,52 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
+                    </table> --}}
                 </div><!-- /.estimate-ship-tax -->
 
                 <div class="col-md-4 col-sm-12 estimate-ship-tax">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <span class="estimate-title">Discount Code</span>
-                                    <p>Enter your coupon code if you have one..</p>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control unicase-form-control text-input"
-                                            placeholder="You Coupon..">
-                                    </div>
-                                    <div class="clearfix pull-right">
-                                        <button type="submit" class="btn-upper btn btn-primary">APPLY
-                                            COUPON</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody><!-- /tbody -->
-                    </table><!-- /table -->
+                    @if (Session::has('coupon'))
+                    @else
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <span class="estimate-title">Discount Code</span>
+                                        <p>Enter your coupon code if you have one..</p>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control unicase-form-control text-input"
+                                                placeholder="You Coupon.." id="coupon_name">
+                                        </div>
+                                        <div class="clearfix pull-right">
+                                            <button type="submit" class="btn-upper btn btn-primary"
+                                                onclick="applyCoupon()">APPLY
+                                                COUPON</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody><!-- /tbody -->
+                        </table><!-- /table -->
+                    @endif
+
                 </div><!-- /.estimate-ship-tax -->
 
                 <div class="col-md-4 col-sm-12 cart-shopping-total">
                     <table class="table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <div class="cart-sub-total">
-                                        Total Quantity<span class="inner-left-md" id="cartQty"></span>
-                                    </div>
-                                    <div class="cart-grand-total">
-                                        Total<span class="total-price"><span class="inner-left-md">
-                                                <span class="sign">$</span><span id="cartSubTotal"></span></span>
-                                        </span>
-                                    </div>
-                                </th>
-                            </tr>
+                        <thead id="couponCalField">
+
                         </thead><!-- /thead -->
                         <tbody>
                             <tr>
                                 <td>
                                     <div class="cart-checkout-btn pull-right">
-                                        <button type="submit" class="btn btn-primary checkout-btn">PROCCED TO
-                                            CHEKOUT</button>
+                                        <a href="{{route('checkout')}}" class="btn btn-primary checkout-btn">PROCCED TO
+                                            CHEKOUT</a>
                                         <span class="">Checkout with multiples address!</span>
                                     </div>
                                 </td>
@@ -162,12 +156,6 @@
                         </tbody><!-- /tbody -->
                     </table><!-- /table -->
                 </div><!-- /.cart-shopping-total -->
-
-
-
-
-
-
             </div><!-- /.shopping-cart -->
         </div> <!-- /.row -->
     </div><!-- /.container -->
